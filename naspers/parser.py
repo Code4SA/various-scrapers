@@ -64,8 +64,12 @@ class ArticleParser(object):
         if ":" in published_date:
             published_date = published_date.split(":")[1].strip()
 
+        meta = article.select(".meta")
+        author = ""
+        if len(meta) == 1: author = meta[0].text
+
         post = {
-            "author" : article.select(".meta")[0].text,
+            "author" : author,
             "summary" : text[0:60],
             "published" : published_date,
             "title" : article.select("h2.sub-heading")[0].text,
