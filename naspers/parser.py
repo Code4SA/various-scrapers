@@ -40,10 +40,11 @@ class Pager(object):
             next = soup.select(".next.active")[0]
             path = next.a["href"]
             return urljoin(host, path)
-        except Exception, e:
-            import traceback; traceback.print_exc()
-            print e.message
+        except IndexError:
             return None
+        except Exception, e:
+            import traceback
+            traceback.print_exc()
 
 class ArticleParser(object):
     def parse_html(self, html):
@@ -72,8 +73,6 @@ class ArticleParser(object):
 
         
         return post 
-
-        
 
 pager = Pager(url)
 parser = ArticleParser()
