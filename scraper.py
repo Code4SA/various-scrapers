@@ -2,10 +2,10 @@ import json
 import argparse
 import beanstalkc
 import sys
-import newspapers.caxton as caxton
-import newspapers.naspers as naspers
+import scrapers.caxton as caxton
+import scrapers.naspers as naspers
 import time
-from newspapers.config import beanstalk
+from scrapers.config import beanstalk
 
 #beanstalk = beanstalkc.Connection(host='localhost', port=11300)
 
