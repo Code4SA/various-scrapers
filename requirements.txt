@@ -2,6 +2,7 @@ BeautifulSoup==3.2.1
 Pillow==2.3.0
 PyYAML==3.10
 argparse==1.2.1
+beanstalkc==0.4.0
 beautifulsoup4==4.3.2
 cssselect==0.9.1
 feedparser==5.1.3
