@@ -6,7 +6,7 @@ from goose import Goose
 from caxton import publications
 
 
-g = Goose({'local_storage_path': "/tmp/goose/"})
+g = Goose()
 client = MongoClient()
 db = client.article_db
 articles = db.articles
