@@ -1,9 +1,15 @@
+import json
 from goose import Goose
 from pymongo import MongoClient
 from bs4 import BeautifulSoup
 import requests
 from urlparse import urlparse, urljoin
 from publications import publications
+#import beanstalkc
+from .. import config
+
+#beanstalk = beanstalkc.Connection(host='localhost', port=11300)
+beanstalk = config.beanstalk
 
 g = Goose()
 client = MongoClient()
@@ -16,7 +22,7 @@ def new_url(path):
 class Pager(object):
     def __init__(self, first_page):
         self.url = first_page
-        self.host = urlparse(url).scheme + "://" + urlparse(url).hostname
+        self.host = urlparse(self.url).scheme + "://" + urlparse(self.url).hostname
 
     def _new_url(self, path):
         return urljoin(self.host, path)
@@ -32,7 +38,7 @@ class Pager(object):
             for el in soup.select(".pod-title"):
                 yield self._new_url(el.a["href"])
         
-            url = pager._next_page(html)
+            url = self._next_page(html)
             if not url: break
         
 
@@ -80,23 +86,29 @@ class ArticleParser(object):
         
         return post 
 
-for (publication, base_url) in publications:
-    if not base_url.endswith("/"): base_url += "/"
-    url = base_url + "news/page:1/category:0"
+def produce():
+    for publication, base_url in publications:
+        if not base_url.endswith("/"): base_url += "/"
+        url = base_url + "news/page:1/category:0"
 
-    pager = Pager(url)
+        pager = Pager(url)
+        for url in pager.urls:
+            print url
+            beanstalk.put(json.dumps({
+                "url" : url,
+                "scraper" : "naspers_local",
+                "publication" : publication,
+            }))
+
+def consume(job):
+    url = job["url"]
+    print url
     parser = ArticleParser()
-    count = 0
+    
+    if not articles.find_one({"url" : url}):
+        content = requests.get(url)
+        post = parser.parse_html(content.text)
+        post["publication"] = job["publication"]
+        post["url"] = url
 
-    for url in pager.urls:
-        if not articles.find_one({"url" : url}):
-            count += 1
-            content = requests.get(url)
-            post = parser.parse_html(content.text)
-            post["publication"] = publication
-            post["url"] = url
-
-            articles.insert(post)
-            count += 1
-        print url
-    print "%s: %d articles added" % (publication, count)
+        articles.insert(post)
