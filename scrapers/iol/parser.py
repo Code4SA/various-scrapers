@@ -4,57 +4,45 @@ import datetime
 import feedparser
 from dateutil import parser as date_parser
 from publications import publications
-from ..config import beanstalk, articles
-from goose import Goose
+from ..config import beanstalk, articles, g
+from ..scrapers import FeedScraper
 
-g = Goose()
-class produce():
-    for publication, feed_url in publications:
-        feed = feedparser.parse(feed_url)
-        for entry in feed["entries"]:
-            try:
-                url = entry["link"]
-                print url
-                beanstalk.put(json.dumps({
-                    "url" : url,
-                    "scraper" : "iol",
-                    "publication" : publication,
-                    "entry" : {
-                        "summary" : entry["description"],
-                        "published" : entry["published"],
-                        "title" : entry["title"],
-                    }
-                }))
-            except Exception, e:
-                import traceback
-                traceback.print_exc()
+class Scraper(FeedScraper):
+    def __init__(self, publications):
+        super(Scraper, self).__init__(publications)
+
+    def _gen_prod_message(self, entry, publication):
+        url = entry["link"]
+        return {
+            "url" : url,
+            "scraper" : "iol",
+            "publication" : publication,
+            "entry" : {
+                "summary" : entry["description"],
+                "published" : entry["published"],
+                "title" : entry["title"],
+            }
+        }
+
+    def _gen_consumer_message(self, article, job):
+        entry = job["entry"]
+
+        return {
+            "publication" : job["publication"],
+            "url" : job["url"],
+            "author" : article.author if hasattr(article, "author") else "",
+            "summary" : entry["summary"],
+            "published" : date_parser.parse(entry["published"]),
+            "title" : entry["title"],
+            "text" : article.cleaned_text,
+            "owner" : "IOL",
+            "sub_type" : 1,
+            "downloaded_at" : datetime.datetime.now()
+        }
+
+scraper = Scraper(publications)
+def produce():
+    scraper.produce()
 
 def consume(job):
-    url = job["url"]
-    entry = job["entry"]
-    if not articles.find_one({"url" : url}):
-        print url
-        try:
-            article = g.extract(url=url)
-
-            post = {
-                "publication" : job["publication"],
-                "url" : url,
-                "author" : article.author if hasattr(article, "author") else "",
-                "summary" : entry["summary"],
-                "published" : date_parser.parse(entry["published"]),
-                "title" : entry["title"],
-                "text" : article.cleaned_text,
-                "owner" : "IOL",
-                "sub_type" : 1,
-                "downloaded_at" : datetime.datetime.now()
-            }
-
-            articles.insert(post)
-        except IOError, e:
-            print e.message
-            print url
-        except Exception, e:
-            import traceback
-            traceback.print_exc()
-
+    scraper.consume(job)
