@@ -13,3 +13,4 @@ nltk==2.0.4
 pymongo==2.6.3
 requests==2.2.1
 wsgiref==0.1.2
+html5lib
