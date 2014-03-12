@@ -103,7 +103,7 @@ def consume(job):
     if not articles.find_one({"url" : url}):
         content = requests.get(url)
         post = parser.parse_html(content.text)
-        post["publication"] = date_parser.parse(job["publication"])
+        post["publication"] = job["publication"]
         post["url"] = url
         post["downloaded_at"] = datetime.datetime.now()
         articles.insert(post)
