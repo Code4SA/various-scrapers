@@ -68,6 +68,7 @@ class ArticleParser(object):
         meta = article.select(".meta")
         author = ""
         if len(meta) == 1: author = meta[0].text
+        if ":" in author: author = author.split(":")[1].strip()
 
         post = {
             "author" : author,
