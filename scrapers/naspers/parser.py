@@ -1,4 +1,5 @@
 import json
+import datetime
 from goose import Goose
 from pymongo import MongoClient
 from bs4 import BeautifulSoup
@@ -110,5 +111,7 @@ def consume(job):
         post = parser.parse_html(content.text)
         post["publication"] = job["publication"]
         post["url"] = url
-
+        post["downloaded_at"] = datetime.datetime.now()
         articles.insert(post)
+
+

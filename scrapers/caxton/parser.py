@@ -1,4 +1,5 @@
 import json
+import datetime
 import feedparser
 import os
 import requests
@@ -54,7 +55,10 @@ def consume(job):
                 "published" : entry["published"],
                 "title" : article.title,
                 "meta_description" : article.meta_description,
-                "text" : article.cleaned_text
+                "text" : article.cleaned_text,
+                "owner" : "Caxton",
+                "sub_type" : 2,
+                "downloaded_at" : datetime.datetime.now()
             }
 
             articles.insert(post)
