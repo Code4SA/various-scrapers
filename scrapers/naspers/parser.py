@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import requests
 from urlparse import urlparse, urljoin
 from publications import publications
-#import beanstalkc
+from dateutil import parser as date_parser
 from ..config import beanstalk, articles
 
 g = Goose()
@@ -103,7 +103,7 @@ def consume(job):
     if not articles.find_one({"url" : url}):
         content = requests.get(url)
         post = parser.parse_html(content.text)
-        post["publication"] = job["publication"]
+        post["publication"] = date_parser.parse(job["publication"])
         post["url"] = url
         post["downloaded_at"] = datetime.datetime.now()
         articles.insert(post)
