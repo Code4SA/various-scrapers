@@ -32,8 +32,8 @@ class produce():
 def consume(job):
     url = job["url"]
     entry = job["entry"]
-    print url
     if not articles.find_one({"url" : url}):
+        print url
         try:
             article = g.extract(url=url)
 
