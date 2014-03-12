@@ -7,15 +7,9 @@ import requests
 from urlparse import urlparse, urljoin
 from publications import publications
 #import beanstalkc
-from .. import config
-
-#beanstalk = beanstalkc.Connection(host='localhost', port=11300)
-beanstalk = config.beanstalk
+from ..config import beanstalk, articles
 
 g = Goose()
-client = MongoClient()
-db = client.article_db
-articles = db.articles
 
 def new_url(path):
     return urljoin(host, path)

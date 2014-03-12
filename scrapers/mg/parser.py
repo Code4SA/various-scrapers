@@ -6,7 +6,6 @@ import json
 from ..config import articles
 
 
-#feed_url = "http://thinlayer.mg.co.za/workers/api/zone/home-page-top-stories"
 feed_url = "http://mg.co.za/feeds/lexisnexis"
 
 def consume():

@@ -7,13 +7,9 @@ from pymongo import MongoClient
 from goose import Goose
 from caxton import publications
 from .. import config
-
-beanstalk = config.beanstalk
+from ..config import articles, beanstalk
 
 g = Goose()
-client = MongoClient()
-db = client.article_db
-articles = db.articles
 
 def produce():
     for publication, feed_url in publications:
