@@ -5,14 +5,14 @@ import sys
 import scrapers.caxton as caxton
 import scrapers.naspers as naspers
 import scrapers.mg as mg
+import scrapers.iol as iol
 import time
 from scrapers.config import beanstalk
-
-#beanstalk = beanstalkc.Connection(host='localhost', port=11300)
 
 consumer_map = {
     "caxton_local" : caxton,
     "naspers_local" : naspers,
+    "iol" : iol,
 }
 
 def consumer():
@@ -30,6 +30,7 @@ def producer():
     caxton.produce()
     naspers.produce()
     mg.produce()
+    iol.produce()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -40,8 +41,6 @@ if __name__ == "__main__":
         consumer()
     elif args.task == "producer":
         producer()
-    elif args.task == "test":
-        mg.produce()
     else:
         # TODO - figure out how to throw an argparse error
         print "Invalid option"
