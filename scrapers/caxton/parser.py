@@ -6,10 +6,8 @@ import requests
 from pymongo import MongoClient
 from goose import Goose
 from caxton import publications
-#import beanstalkc
 from .. import config
 
-#beanstalk = beanstalkc.Connection(host='localhost', port=11300)
 beanstalk = config.beanstalk
 
 g = Goose()
