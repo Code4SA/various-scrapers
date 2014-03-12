@@ -8,6 +8,7 @@ from goose import Goose
 from caxton import publications
 from .. import config
 from ..config import articles, beanstalk
+from dateutil import parser as date_parser
 
 g = Goose()
 
@@ -46,7 +47,7 @@ def consume(job):
                 "url" : url,
                 "author" : entry["author"],
                 "summary" : entry["summary"],
-                "published" : entry["published"],
+                "published" : date_parser.parse(entry["published"]),
                 "title" : article.title,
                 "meta_description" : article.meta_description,
                 "text" : article.cleaned_text,
