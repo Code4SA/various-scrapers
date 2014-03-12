@@ -15,4 +15,4 @@ requests==2.2.1
 wsgiref==0.1.2
 html5lib
 fabric
-dateutil
+python-dateutil
