@@ -1,4 +1,5 @@
 import json
+import logging
 import argparse
 import beanstalkc
 import sys
@@ -6,7 +7,10 @@ import time
 from scrapers.config import beanstalk
 from publications import scrapermap
 
+logger = logging.getLogger(__name__)
+
 def consumer():
+    logger.info("Starting consumer")
     while True:
         print "Waiting for job" 
         job = beanstalk.reserve()
@@ -19,7 +23,7 @@ def consumer():
 
 def producer():
     for publication, scraper in scrapermap.items():
-        print "Producer is running: %s" % publication
+        logger.info("Producer is running: %s" % publication)
         scraper.produce()
 
 if __name__ == "__main__":
