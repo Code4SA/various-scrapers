@@ -42,7 +42,7 @@
             "handlers": ["error_file_handler"],
             "propagate": "yes"
         },
-        "Scrapers" : {
+        "scrapers" : {
             "level": "DEBUG",
             "handlers": ["console", "info_file_handler", "error_file_handler"],
             "propagate": "yes"
@@ -50,7 +50,7 @@
     },
 
     "root": {
-        "level": "ERROR",
-        "handlers": ["console", "error_file_handler"]
+        "level": "INFO",
+        "handlers": ["console", "info_file_handler", "error_file_handler"]
     }
 }
