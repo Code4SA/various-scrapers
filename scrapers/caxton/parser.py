@@ -1,4 +1,5 @@
 import json
+import logging
 import datetime
 import feedparser
 import os
@@ -10,6 +11,7 @@ from .. import config
 from ..config import articles, beanstalk
 from dateutil import parser as date_parser
 
+logger = logging.getLogger(__name__)
 g = Goose()
 
 def produce():
@@ -30,8 +32,7 @@ def produce():
                     }
                 }))
             except Exception, e:
-                import traceback
-                traceback.print_exc()
+                logger.error("Error putting a message into the queue", exc_info=True)
 
 
 def consume(job):
@@ -58,9 +59,7 @@ def consume(job):
 
             articles.insert(post)
         except IOError, e:
-            print e.message
-            print url
+            logger.error("IOError running Goose", exc_info=True)
         except Exception, e:
-            import traceback
-            traceback.print_exc()
+            logger.error("General article scraping exception", exc_info=True)
 
