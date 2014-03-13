@@ -6,6 +6,7 @@ import scrapers.caxton as caxton
 import scrapers.naspers as naspers
 import scrapers.mg as mg
 import scrapers.iol as iol
+import scrapers.naspers_feeds as naspers_feeds
 import time
 from scrapers.config import beanstalk
 
@@ -13,6 +14,7 @@ consumer_map = {
     "caxton_local" : caxton,
     "naspers_local" : naspers,
     "iol" : iol,
+    "naspers_feeds" : naspers_feeds,
 }
 
 def consumer():
@@ -31,6 +33,7 @@ def producer():
     naspers.produce()
     mg.produce()
     iol.produce()
+    naspers_feeds.produce()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
