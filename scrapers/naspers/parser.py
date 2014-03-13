@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import requests
 from urlparse import urlparse, urljoin
 from publications import publications
-#import beanstalkc
+from dateutil import parser as date_parser
 from ..config import beanstalk, articles
 
 g = Goose()
@@ -68,6 +68,7 @@ class ArticleParser(object):
         meta = article.select(".meta")
         author = ""
         if len(meta) == 1: author = meta[0].text
+        if ":" in author: author = author.split(":")[1].strip()
 
         post = {
             "author" : author,
