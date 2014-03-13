@@ -2,20 +2,9 @@ import json
 import argparse
 import beanstalkc
 import sys
-import scrapers.caxton as caxton
-import scrapers.naspers as naspers
-import scrapers.mg as mg
-import scrapers.iol as iol
-import scrapers.naspers_feeds as naspers_feeds
 import time
 from scrapers.config import beanstalk
-
-consumer_map = {
-    "caxton_local" : caxton,
-    "naspers_local" : naspers,
-    "iol" : iol,
-    "naspers_feeds" : naspers_feeds,
-}
+from publications import scrapermap
 
 def consumer():
     while True:
@@ -23,17 +12,15 @@ def consumer():
         job = beanstalk.reserve()
         scrape_job = json.loads(job.body)
         scraper_name = scrape_job["scraper"]
-        scraper = consumer_map[scraper_name]
+        scraper = scrapermap[scraper_name]
         
         scraper.consume(scrape_job)
         job.delete()
 
 def producer():
-    caxton.produce()
-    naspers.produce()
-    mg.produce()
-    iol.produce()
-    naspers_feeds.produce()
+    for publication, scraper in scrapermap.items():
+        print "Producer is running: %s" % publication
+        scraper.produce()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
