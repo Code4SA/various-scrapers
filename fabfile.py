@@ -55,5 +55,5 @@ def deploy():
     with virtualenv():
         run('pip install -r requirements.txt')
 
-    sudo("supervisorctl restart scraper_consumers")
+    sudo("supervisorctl restart 'scraper_consumers:*'")
 
