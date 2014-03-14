@@ -18,7 +18,7 @@ class Scraper(FeedScraper):
             "scraper" : "naspers_feeds",
             "publication" : publication,
             "entry" : {
-                "summary" : entry["description"],
+                "summary" : entry.get("description", ""),
                 "published" : entry["published"],
                 "title" : entry["title"],
             }
