@@ -1,4 +1,5 @@
 import json
+import datetime
 import logging
 
 import feedparser
@@ -23,6 +24,8 @@ class FeedScraper(object):
                         raise OlderArticlesAlreadySeenException()
                     print url
                     msg = self._gen_prod_message(entry, publication)
+                    if not "author" in msg["entry"] and "author" in entry:
+                        msg["entry"]["author"] = entry["author"]
                     beanstalk.put(json.dumps(msg))
             except OlderArticlesAlreadySeenException:
                 pass
@@ -39,8 +42,17 @@ class FeedScraper(object):
             try:
                 article = g.extract(url=url)
 
+                entry.update(
+                    url=url, downloaded_at=datetime.datetime.now(), publication=job["publication"],
+                    text=article.cleaned_text
+                )
+                if not "author" in entry and hasattr(article, "author"):
+                    entry["author"] = article.author
+
                 data = self._gen_consumer_message(article, job)
-                articles.insert(data)
+                entry.update(data)
+                articles.insert(entry)
+
             except IOError, e:
                 logger.exception("Error extracting article")
             except Exception, e:

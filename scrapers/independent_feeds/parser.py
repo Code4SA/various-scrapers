@@ -26,19 +26,14 @@ class Scraper(FeedScraper):
 
     def _gen_consumer_message(self, article, job):
         entry = job["entry"]
-
-        return {
-            "publication" : job["publication"],
-            "url" : job["url"],
-            "author" : article.author if hasattr(article, "author") else "",
-            "summary" : entry["summary"],
+        
+        data = {
             "published" : date_parser.parse(entry["published"]),
-            "title" : entry["title"],
-            "text" : article.cleaned_text,
             "owner" : "Independent",
             "sub_type" : 1,
-            "downloaded_at" : datetime.datetime.now()
         }
+
+        return data
 
 scraper = Scraper(publications)
 def produce():
