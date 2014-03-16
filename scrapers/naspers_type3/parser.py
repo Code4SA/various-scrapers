@@ -31,7 +31,7 @@ class Scraper(object):
 
                 msg = {
                     "url" : urljoin(url, article_url),
-                    "scraper" : "kougaexpress",
+                    "scraper" : "naspers_type3",
                     "publication" : publication,
                     "entry" : {
                         "title" : title,
@@ -59,6 +59,7 @@ class Scraper(object):
                     "title" : entry["title"],
                     "text" : article.cleaned_text,
                     "owner" : "Naspers/Media24",
+                    "sub_type" : 3,
                     "downloaded_at" : datetime.datetime.now()
                 }
             except UnicodeEncodeError:

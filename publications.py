@@ -4,7 +4,7 @@ import scrapers.mg as mg
 import scrapers.iol as iol
 import scrapers.naspers_feeds as naspers_feeds
 import scrapers.independent_feeds as independent_feeds
-import scrapers.kougaexpress as kougaexpress
+import scrapers.naspers_type3 as naspers_type3
 
 scrapermap = {
     "caxton_local" : caxton,
@@ -13,6 +13,6 @@ scrapermap = {
     "naspers_feeds" : naspers_feeds,
     "independent_feeds" : independent_feeds,
     "mg" : mg,
-    "kougaexpress" : kougaexpress
+    "naspers_type3" : naspers_type3
 }
 
