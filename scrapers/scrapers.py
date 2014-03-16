@@ -1,6 +1,7 @@
 import json
 import datetime
 import logging
+import dateutil.parser as date_parser
 
 import feedparser
 from .config import beanstalk, articles, g
@@ -61,3 +62,31 @@ class FeedScraper(object):
     def _gen_consumer_message(self, article, job):
         raise NotImplementedError()
 
+class BasicFeedScraper(FeedScraper):
+    def __init__(self, publications, scraper, owner, sub_type=1):
+        super(BasicFeedScraper, self).__init__(publications)
+        self.scraper = scraper
+        self.owner = owner
+        self.sub_type = sub_type
+
+    def _gen_prod_message(self, entry, publication):
+        url = entry["link"]
+        return {
+            "url" : url,
+            "scraper" : self.scraper,
+            "publication" : publication,
+            "entry" : {
+                "summary" : entry["description"],
+                "published" : entry["published"],
+                "title" : entry["title"],
+            }
+        }
+
+    def _gen_consumer_message(self, article, job):
+        entry = job["entry"]
+
+        return {
+            "published" : date_parser.parse(entry["published"]),
+            "owner" : self.owner,
+            "sub_type" : self.sub_type,
+        }
