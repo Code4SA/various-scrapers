@@ -3,6 +3,7 @@ publications = [
     ("Bloem Nuus", "http://www.bloemnuus.mobi/"),
     ("Boland Gazette", "http://www.bolandgazette.mobi"),
     ("Carltonville Herald", "http://www.carletonville.mobi"),
+    ("City Vision", "http://www.cityvision.mobi"),
     ("DistriksPos", "http://www.distrikspos.mobi"),
     ("Durban North Fever", "http://www.dnfever.mobi"),
     ("East Griqualand Fever", "http://www.egfever.mobi"),
