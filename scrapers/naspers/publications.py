@@ -19,6 +19,7 @@ publications = [
     ("People's Post", "http://www.peoplespost.mobi"),
     ("Sedibengster", "http://www.sedibengster.mobi"),
     ("South Coast Fever", "http://www.southcoastfever.mobi"),
+    ("Stranger Weekly", "http://stangerweekly.mobi/"),
     ("Worcester Standard", "http://www.wstandard.mobi"),
     ("Tygerburger", "http://www.tygerburger.mobi"),
     ("Ulundi Fever", "http://www.ulundifever.mobi"),
