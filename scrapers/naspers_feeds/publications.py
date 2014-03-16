@@ -1,5 +1,13 @@
 publications = [
     ("City Press", "http://www.citypress.co.za/feed/"),
+    ("City Press - Top Stories", "http://www.citypress.co.za/feature-type/top-stories/feed/"),
+    ("City Press - Sport", "http://www.citypress.co.za/category/sport/feed/"),
+    ("City Press - Entertainment", "http://www.citypress.co.za/category/entertainment/feed/"),
+    ("City Press - Politics", "http://www.citypress.co.za/politics/feed/"),
+    ("City Press - News", "http://www.citypress.co.za/news/feed/"),
+    ("City Press - Business", "http://www.citypress.co.za/business/feed/"),
+    ("City Press - Lifestyle", "http://www.citypress.co.za/lifestyle/feed/"),
+    ("City Press - Columnists", "http://www.citypress.co.za/columnists/feed/"),
     ("News24 - Top Stories", "http://feeds.24.com/articles/sport/featured/topstories/rss"),
     ("News24 - South Africa", "http://feeds.news24.com/articles/channel/topstories/rss"),
     ("News24 - Africa", "http://feeds.news24.com/articles/news24/Africa/rss"),
@@ -9,4 +17,9 @@ publications = [
     ("News24 - Entertainment", "http://feeds.news24.com/articles/news24/SouthAfrica/rss"),
     ("News24 - MyNews24", "http://feeds.news24.com/articles/news24/TopStories/rss"),
     ("News24 - Opinion", "http://feeds.news24.com/articles/news24/World/rss"),
+    ("Rapport - Suid Afrika", "http://feeds.rapport.co.za/articles/Rapport/Suid-Afrika/rss"),
+    ("Rapport - Wereld", "http://feeds.rapport.co.za/articles/Rapport/Wereld/rss"),
+    ("Rapport - Sport", "http://feeds.rapport.co.za/articles/Rapport/Sport/rss"),
+    ("Rapport - Opinie", "http://feeds.rapport.co.za/articles/Rapport/Opinie/rss"),
+    ("Rapport - Sake", "http://feeds.rapport.co.za/articles/Rapport/Sake/rss"),
 ]
