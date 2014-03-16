@@ -5,4 +5,6 @@ publications = [
     ("Daily Dispatch - Business", "http://www.dispatch.co.za/category/business-2/feed/"),
     ("Daily Dispatch - Opinion", "http://www.dispatch.co.za/category/opinion/feed/"),
     ("Daily Dispatch - Sport", "http://www.dispatch.co.za/category/sport/feed/"),
+    ("Matimu News", "http://matimunews.co.za/?feed=rss2"),
+    ("Public Eye News", "http://www.publiceyenews.com/site/feed/"),
 ]
