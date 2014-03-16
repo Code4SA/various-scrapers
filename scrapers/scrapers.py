@@ -1,6 +1,10 @@
+import json
+import logging
+
 import feedparser
 from .config import beanstalk, articles, g
-import json
+
+logger = logging.getLogger(__name__)
 
 class OlderArticlesAlreadySeenException(Exception):
     pass
@@ -38,11 +42,9 @@ class FeedScraper(object):
                 data = self._gen_consumer_message(article, job)
                 articles.insert(data)
             except IOError, e:
-                print e.message
-                print url
+                logger.exception("Error extracting article")
             except Exception, e:
-                import traceback
-                traceback.print_exc()
+                logger.exception("Error extracting article")
 
     def _gen_consumer_message(self, article, job):
         raise NotImplementedError()
