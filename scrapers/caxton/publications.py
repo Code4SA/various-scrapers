@@ -48,7 +48,7 @@ publications = [
     ("Pretoria Moot Record", "http://rekordmoot.co.za/feed/"), 
     ("Pretoria North Rekord", "http://rekordnorth.co.za/feed/"), 
     ("Protea Urban News", "http://proteaurbannews.co.za/feed/"), 
-    ("PUblic Eye Maritzburg", "http://publiceyemaritzburg.co.za/feed/"), 
+    ("Public Eye Maritzburg", "http://publiceyemaritzburg.co.za/feed/"), 
     ("Randburg Sun", "http://randburgsun.co.za/feed/"), 
     ("Randfontein Herald", "http://randfonteinherald.co.za/feed/"), 
     ("Review Bosveld", "http://reviewbosveld.co.za/feed/"), 
