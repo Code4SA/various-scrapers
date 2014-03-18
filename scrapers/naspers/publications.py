@@ -2,6 +2,8 @@ publications = [
     ("Ballito Fever", "http://ballitofever.mobi"),
     ("Bloem Nuus", "http://www.bloemnuus.mobi/"),
     ("Boland Gazette", "http://www.bolandgazette.mobi"),
+    ("Parys Gazette", "http://www.parysgazette.mobi"),
+    ("Die Son", "http://dieson.mobi/"),
     ("Carltonville Herald", "http://www.carletonville.mobi"),
     ("City Vision", "http://www.cityvision.mobi"),
     ("Daily Sun", "http://www.dailysun.mobi"),
