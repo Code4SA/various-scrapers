@@ -11,4 +11,5 @@ publications = [
     ("The Newspaper", "http://www.thenewspaper.co.za/feed/"),
     ("The SA News", "http://www.thesanews.co.za/feed/"),
     ("IQ4 News", "http://www.iq4news.com/rss.xml"),
+    ("Klerksdorp Record", "http://www.northwestnewspapers.co.za/klerksdorprecord/index.php?format=feed&type=rss"),
 ]
