@@ -23,8 +23,11 @@ def consumer():
 
 def producer():
     for publication, scraper in scrapermap.items():
-        logger.info("Producer is running: %s" % publication)
-        scraper.produce()
+        try:
+            logger.info("Producer is running: %s" % publication)
+            scraper.produce()
+        except Exception:
+            logger.exception("Error occurred in producer")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
