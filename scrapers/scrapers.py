@@ -55,9 +55,9 @@ class FeedScraper(object):
                 articles.insert(entry)
 
             except IOError, e:
-                logger.exception("Error extracting article")
+                logger.exception("Error extracting article :%s" % url)
             except Exception, e:
-                logger.exception("Error extracting article")
+                logger.exception("Error extracting article: %s" % url)
 
     def _gen_consumer_message(self, article, job):
         raise NotImplementedError()
