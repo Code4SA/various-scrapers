@@ -3,6 +3,7 @@ import json
 import logging.config
 
 from goose import Goose
+from goose.configuration import Configuration
 import beanstalkc
 from pymongo import MongoClient
 
@@ -11,7 +12,9 @@ beanstalk = beanstalkc.Connection(host='localhost', port=11300)
 client = MongoClient()
 db = client.article_db
 articles = db.articles
-g = Goose()
+config = Configuration()
+config.enable_image_fetching = False
+g = Goose(config)
 
 def setup_logging(
     default_path='logging.json', 
