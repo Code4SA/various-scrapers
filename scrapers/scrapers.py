@@ -27,7 +27,7 @@ class FeedScraper(object):
                     msg = self._gen_prod_message(entry, publication)
                     if not "author" in msg["entry"] and "author" in entry:
                         msg["entry"]["author"] = entry["author"]
-                    beanstalk.put(json.dumps(msg))
+                    yield json.dumps(msg)
             except OlderArticlesAlreadySeenException:
                 pass
 
@@ -52,7 +52,7 @@ class FeedScraper(object):
 
                 data = self._gen_consumer_message(article, job)
                 entry.update(data)
-                articles.insert(entry)
+                return entry
 
             except IOError, e:
                 logger.exception("Error extracting article :%s" % url)
@@ -76,17 +76,21 @@ class BasicFeedScraper(FeedScraper):
             "scraper" : self.scraper,
             "publication" : publication,
             "entry" : {
-                "summary" : entry["description"],
-                "published" : entry["published"],
-                "title" : entry["title"],
+                "summary" : entry.get("description", ""),
+                "published" : entry.get("published", ""),
+                "title" : entry.get("title", ""),
             }
         }
 
     def _gen_consumer_message(self, article, job):
         entry = job["entry"]
 
+        published = ""
+        if entry["published"]:
+            published = date_parser.parse(entry["published"])
+
         return {
-            "published" : date_parser.parse(entry["published"]),
+            "published" : published,
             "owner" : self.owner,
             "sub_type" : self.sub_type,
         }

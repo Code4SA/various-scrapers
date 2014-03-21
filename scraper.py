@@ -1,10 +1,9 @@
 import json
 import logging
 import argparse
-import beanstalkc
 import sys
 import time
-from scrapers.config import beanstalk
+from scrapers.config import beanstalk, db_insert
 from publications import scrapermap
 
 logger = logging.getLogger(__name__)
@@ -18,14 +17,18 @@ def consumer():
         scraper_name = scrape_job["scraper"]
         scraper = scrapermap[scraper_name]
         
-        scraper.consume(scrape_job)
+        post = scraper.consume(scrape_job)
+        db_insert(post)
         job.delete()
 
 def producer():
     for publication, scraper in scrapermap.items():
         try:
             logger.info("Producer is running: %s" % publication)
-            scraper.produce()
+            for job in scraper.produce():
+                if job:
+                    beanstalk.put(job)
+
         except Exception:
             logger.exception("Error occurred in producer")
 

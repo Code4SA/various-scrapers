@@ -1,15 +1,12 @@
 import json
 import datetime
-from goose import Goose
 from pymongo import MongoClient
 from bs4 import BeautifulSoup
 import requests
 from urlparse import urlparse, urljoin
 from publications import publications
 from dateutil import parser as date_parser
-from ..config import beanstalk, articles
-
-g = Goose()
+from ..config import articles, db_insert
 
 def new_url(path):
     return urljoin(host, path)
@@ -90,11 +87,11 @@ def produce():
         pager = Pager(url)
         for url in pager.urls:
             print url
-            beanstalk.put(json.dumps({
+            yield json.dumps({
                 "url" : url,
                 "scraper" : "naspers_local",
                 "publication" : publication,
-            }))
+            })
 
 def consume(job):
     url = job["url"]
@@ -107,6 +104,6 @@ def consume(job):
         post["publication"] = job["publication"]
         post["url"] = url
         post["downloaded_at"] = datetime.datetime.now()
-        articles.insert(post)
+        return post
 
 

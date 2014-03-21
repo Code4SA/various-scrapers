@@ -3,7 +3,7 @@ from ..scrapers import BasicFeedScraper
 
 scraper = BasicFeedScraper(publications, "iol", "IOL")
 def produce():
-    scraper.produce()
+    return scraper.produce()
 
 def consume(job):
-    scraper.consume(job)
+    return scraper.consume(job)

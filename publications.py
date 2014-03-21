@@ -12,7 +12,7 @@ scrapermap = {
     "iol" : iol,
     "naspers_feeds" : naspers_feeds,
     "independent_feeds" : independent_feeds,
-    "mg" : mg,
+    #"mg" : mg,
     "naspers_type3" : naspers_type3
 }
 

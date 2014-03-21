@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import requests
 from dateutil import parser as date_parser
 from publications import publications
-from ..config import beanstalk, articles, g
+from ..config import articles, g
 from ..scrapers import FeedScraper
 
 class Scraper(object):
@@ -40,7 +40,7 @@ class Scraper(object):
                     }
                 }
 
-                beanstalk.put(json.dumps(msg))
+                yield json.dumps(msg)
 
     def consume(self, job):
         url = job["url"]
@@ -67,7 +67,7 @@ class Scraper(object):
  
 scraper = Scraper(publications)
 def produce():
-    scraper.produce()
+    return scraper.produce()
 
 def consume(job):
-    scraper.consume(job)
+    return scraper.consume(job)

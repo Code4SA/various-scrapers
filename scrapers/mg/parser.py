@@ -3,7 +3,7 @@ import datetime
 from bs4 import BeautifulSoup 
 from dateutil import parser
 import json
-from ..config import articles
+from ..config import db_insert, articles
 
 
 feed_url = "http://mg.co.za/feeds/lexisnexis"
@@ -32,5 +32,5 @@ def produce():
                     "sub_type" : 1,
                     "downloaded_at" : datetime.datetime.now()
                 }
-                articles.insert(post)
-    print count
+                db_insert(post)
+    return []
