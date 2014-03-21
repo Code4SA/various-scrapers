@@ -1,4 +1,5 @@
 import json
+import logging
 import datetime
 from pymongo import MongoClient
 from bs4 import BeautifulSoup
@@ -8,6 +9,7 @@ from publications import publications
 from dateutil import parser as date_parser
 from ..config import articles, db_insert
 
+logger = logging.getLogger(__name__)
 def new_url(path):
     return urljoin(host, path)
 
@@ -43,8 +45,7 @@ class Pager(object):
         except IndexError:
             return None
         except Exception, e:
-            import traceback
-            traceback.print_exc()
+            logging.exception(e)
 
 class ArticleParser(object):
     def parse_html(self, html):
@@ -86,7 +87,6 @@ def produce():
 
         pager = Pager(url)
         for url in pager.urls:
-            print url
             yield json.dumps({
                 "url" : url,
                 "scraper" : "naspers_local",
@@ -95,7 +95,6 @@ def produce():
 
 def consume(job):
     url = job["url"]
-    print url
     parser = ArticleParser()
     
     if not articles.find_one({"url" : url}):

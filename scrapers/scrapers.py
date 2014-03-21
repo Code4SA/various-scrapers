@@ -23,7 +23,6 @@ class FeedScraper(object):
                     url = entry["link"]
                     if articles.find_one({"url" : url}):
                         raise OlderArticlesAlreadySeenException()
-                    print url
                     msg = self._gen_prod_message(entry, publication)
                     if not "author" in msg["entry"] and "author" in entry:
                         msg["entry"]["author"] = entry["author"]
@@ -37,9 +36,7 @@ class FeedScraper(object):
     def consume(self, job):
         url = job["url"]
         entry = job["entry"]
-        print job["publication"]
         if not articles.find_one({"url" : url}):
-            print url
             try:
                 article = g.extract(url=url)
 

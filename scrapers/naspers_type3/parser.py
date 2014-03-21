@@ -24,7 +24,6 @@ class Scraper(object):
                 el = article.select(".newslist_title_text")[0]
                 title = el.text.strip()
                 article_url = el["href"]
-                print article_url
 
                 date = article.select(".newslist_date_text")[0].text.strip()
                 text = article.select(".grey_font12px")[0].text.strip()
@@ -45,10 +44,8 @@ class Scraper(object):
     def consume(self, job):
         url = job["url"]
         entry = job["entry"]
-        print job["publication"]
         if not articles.find_one({"url" : url}):
             try:
-                print url
                 article = g.extract(url=url)
                 return {
                     "publication" : job["publication"],
