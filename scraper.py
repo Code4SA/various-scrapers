@@ -29,6 +29,8 @@ def producer():
                 if job:
                     beanstalk.put(job)
 
+        except ConnectionError:
+            logger.exception("Could not connect to server")
         except Exception:
             logger.exception("Error occurred in producer")
 
