@@ -52,4 +52,5 @@ publications = [
     ("Weslander", "http://www.weslander.mobi"),
     ("Worcester Standard", "http://www.wstandard.mobi"),
     ("Zululand Fever", "http://www.zululandfever.mobi"),
+    ("Uitenhage Despatch", "http://udnews.mobi/"),
 ]
