@@ -16,4 +16,5 @@ publications = [
     ("Cape Business News", "http://www.cbn.co.za/feed/rss/news?format=feed"),
     ("Franco - SA", "http://www.franco-sa.co.za/feed"),
     ("JBay News", "http://www.jbaynews.com/feed/"),
+    ("SME South Africa", "http://www.smesouthafrica.co.za/feed/"),
 ]
