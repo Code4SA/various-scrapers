@@ -9,6 +9,7 @@ from dateutil import parser as date_parser
 from publications import publications
 from ..config import articles, g
 from ..scrapers import FeedScraper
+from ..utils import url2soup
 
 class Scraper(object):
     def __init__(self, publications):
@@ -16,9 +17,7 @@ class Scraper(object):
 
     def produce(self):
         for publication, url in self.publications:
-            r = requests.get(url)
-            content = r.content
-            soup = BeautifulSoup(content, "html5lib")
+            soup = url2soup(url)
             for article in soup.select(".edition_box"):
 
                 el = article.select(".newslist_title_text")[0]
