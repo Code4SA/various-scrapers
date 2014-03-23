@@ -28,7 +28,7 @@ class Pager(object):
             content = requests.get(url)
             html = content.text
 
-            soup = BeautifulSoup(html)
+            soup = BeautifulSoup(html, "html5lib")
             for el in soup.select(".pod-title"):
                 yield self._new_url(el.a["href"])
         
