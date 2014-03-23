@@ -5,6 +5,7 @@ import sys
 import time
 from scrapers.config import beanstalk, db_insert
 from publications import scrapermap
+from requests.exceptions import ConnectionError
 
 logger = logging.getLogger(__name__)
 
@@ -30,9 +31,9 @@ def producer():
                     beanstalk.put(job)
 
         except ConnectionError:
-            logger.exception("Could not connect to server")
+            logger.exception("Could not connect to server for %s" % publication)
         except Exception:
-            logger.exception("Error occurred in producer")
+            logger.exception("Error occurred in producer for %s" % publication)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
