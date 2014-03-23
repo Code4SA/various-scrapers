@@ -15,4 +15,5 @@ publications = [
     ("Rise 'n Shine", "http://www.rise-n-shine.co.za/index.php?option=com_content&view=category&layout=blog&id=1&Itemid=50&format=feed&type=rss"),
     ("Cape Business News", "http://www.cbn.co.za/feed/rss/news?format=feed"),
     ("Franco - SA", "http://www.franco-sa.co.za/feed"),
+    ("JBay News", "http://www.jbaynews.com/feed/"),
 ]
