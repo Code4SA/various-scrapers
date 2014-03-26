@@ -72,7 +72,7 @@ publications = [
     ("Steelburger Nuus", "http://nelspruitpost.co.za/feed/"), 
     ("Streek News", "http://streeknuus.co.za/feed/"), 
     ("Streeknuus", "http://streeknuus.co.za/feed/"), 
-    ("Th Citizen", "http://citizen.co.za/feed/"), 
+    ("The Citizen", "http://citizen.co.za/feed/"), 
     ("The Citizen", "http://citizen.co.za/feed/"), 
     ("The Tembisan", "http://tembisan.co.za/feed/"), 
     ("The White River Post", "http://whiteriverpost.co.za/feed/"), 
