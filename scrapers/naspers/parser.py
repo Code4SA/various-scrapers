@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 import requests
 from urlparse import urlparse, urljoin
 from publications import publications
+from requests.exceptions import ConnectionError
 from dateutil import parser as date_parser
 from ..config import articles, db_insert
 
@@ -25,15 +26,19 @@ class Pager(object):
     def urls(self):
         url = self.url
         while True:
-            content = requests.get(url)
-            html = content.text
+            try:
+                content = requests.get(url)
+                html = content.text
 
-            soup = BeautifulSoup(html, "html5lib")
-            for el in soup.select(".pod-title"):
-                yield self._new_url(el.a["href"])
-        
-            url = self._next_page(html)
-            if not url: break
+                soup = BeautifulSoup(html, "html5lib")
+                for el in soup.select(".pod-title"):
+                    yield self._new_url(el.a["href"])
+            
+                url = self._next_page(html)
+                if not url: break
+            except ConnectionError:
+                logger.exception("Could not connect to: %s" % url)
+                break
         
 
     def _next_page(self, html):
