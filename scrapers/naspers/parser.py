@@ -102,12 +102,15 @@ def consume(job):
     url = job["url"]
     parser = ArticleParser()
     
-    if not articles.find_one({"url" : url}):
-        content = requests.get(url)
-        post = parser.parse_html(content.text)
-        post["publication"] = job["publication"]
-        post["url"] = url
-        post["downloaded_at"] = datetime.datetime.now()
-        return post
+    try:
+        if not articles.find_one({"url" : url}):
+            content = requests.get(url)
+            post = parser.parse_html(content.text)
+            post["publication"] = job["publication"]
+            post["url"] = url
+            post["downloaded_at"] = datetime.datetime.now()
+            return post
+    except Exception:
+        logger.exception("Could not download: %s" % url)
 
 
