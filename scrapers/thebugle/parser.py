@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 
 feed_url = "http://www.thebugle.co.za/processors/getArticles.php"
 
-def consume():
+def consume(url):
     pass
 
 def produce():
