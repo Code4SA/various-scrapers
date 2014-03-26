@@ -18,7 +18,7 @@ scrapermap = {
     "mg" : mg,
     "thebugle" : thebugle,
     "naspers_type3" : naspers_type3,
-    "financial_mail" : financialmail
+    "financial_mail" : financialmail,
     "isolezwe" : isolezwe
 }
 
