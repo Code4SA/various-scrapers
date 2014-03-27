@@ -11,7 +11,7 @@ def url2soup(url):
         soup = BeautifulSoup(content, "html5lib")
         return soup
     except UnicodeEncodeError:
-        logger.exception("Could not decode page")
+        logger.exception("Could not decode page: %s" % url)
     except Exception:
-        logger.exception("An error occurred while downloading html")
+        logger.exception("An error occurred while downloading html from url: %s" % url)
 
