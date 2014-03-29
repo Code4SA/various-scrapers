@@ -19,6 +19,9 @@ def consumer():
         scraper = scrapermap[scraper_name]
         
         post = scraper.consume(scrape_job)
+        entry = post.get("entry", "").strip()
+        if len(entry) < 5:
+            logger.warn("Missing text from %s" % post["url"])
         db_insert(post)
         job.delete()
 
