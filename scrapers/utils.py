@@ -12,6 +12,4 @@ def url2soup(url):
         return soup
     except UnicodeEncodeError:
         logger.exception("Could not decode page: %s" % url)
-    except Exception:
-        logger.exception("An error occurred while downloading html from url: %s" % url)
 
