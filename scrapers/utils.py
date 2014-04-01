@@ -1,8 +1,15 @@
 from bs4 import BeautifulSoup
 import requests
 import logging
+from dateutil import parser
 
 logger = logging.getLogger(__name__)
+
+def parse_date(date_str):
+    try:
+        return parser.parse(date_str)
+    except Exception:
+        return None
 
 def url2soup(url):
     try:
