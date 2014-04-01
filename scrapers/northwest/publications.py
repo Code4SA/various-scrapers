@@ -1,0 +1,15 @@
+publications = [
+    ("Gemsbok", "http://www.northwestnewspapers.co.za/gemsbok/index.php?format=feed&type=rss"),
+    ("Gemsbok - Nuus", "http://www.northwestnewspapers.co.za/gemsbok/index.php/homepage/nuus"),
+    ("Gemsbok - Local is lekker", "http://www.northwestnewspapers.co.za/gemsbok/index.php/homepage/local-is-lekker?format=feed&type=rss"),
+    ("Gemsbok - Schools", "http://www.northwestnewspapers.co.za/gemsbok/index.php/homepage/schools?format=feed&type=rss"),
+    ("Gemsbok - Sport", "http://www.northwestnewspapers.co.za/gemsbok/index.php/sport?format=feed&type=rss"),
+    ("Gemsbok - Rubrike", "http://www.northwestnewspapers.co.za/gemsbok/index.php/rubrieke?format=feed&type=rss"),
+    ("Klerksdorp - Rekord", "http://www.northwestnewspapers.co.za/klerksdorprecord/index.php?format=feed&type=rss"),
+    ("Britspos", "http://www.northwestnewspapers.co.za/britspos/index.php?format=feed&type=rss"),
+    ("Mafikeng Mail", "http://www.northwestnewspapers.co.za/mafikengmail/index.php?format=feed&type=rss"),
+    ("Noordwester", "http://www.northwestnewspapers.co.za/noordwester/index.php?format=feed&type=rss"),
+    ("Rustenburg Herald", "http://www.northwestnewspapers.co.za/herald/index.php?format=feed&type=rss"),
+    ("Stellalander", "http://www.northwestnewspapers.co.za/stellalander/index.php?format=feed&type=rss"),
+    ("Herald's Bonus", "http://www.heraldbonus.co.za/index.php?format=feed&type=rss"),
+]
