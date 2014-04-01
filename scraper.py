@@ -23,8 +23,6 @@ def consumer():
             if len(entry) < 5:
                 logger.warn("Missing text from %s" % post["url"])
             db_insert(post)
-        else:
-            logger.warn("Unexpected empty job: %s" % scraper_name)
         job.delete()
 
 def producer():
