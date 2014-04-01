@@ -19,9 +19,15 @@ class StdOutListener(StreamListener):
 
     def on_data(self, data):
         js = json.loads(data)
-        if js["user"]["id_str"] in self.accounts:
-            text = js["text"].encode("utf8")
-            print("%s> %s" % (js["user"]["screen_name"], text))
+        try:
+            msg_id = js["id"]
+            if js["user"]["id_str"] in self.accounts:
+                text = js["text"].decode("utf8")
+                tweet_url = "https://twitter.com/%s/status/%s" % (msg_id, js["user"]["screen_name"])
+                screen_name = js["user"]["screen_name"].encode("utf8")
+                print("%s - %s [%s]> %s" % (screen_name, js["created_at"], tweet_url, text))
+        except Exception:
+            import pdb; pdb.set_trace()
         return True
 
     def on_error(self, status):
