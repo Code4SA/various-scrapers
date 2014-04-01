@@ -12,9 +12,10 @@ logger = logging.getLogger(__name__)
 def consumer():
     logger.info("Starting consumer")
     while True:
-        print "Waiting for job" 
+        logger.info("Waiting for job")
         job = beanstalk.reserve()
         scrape_job = json.loads(job.body)
+        logger.info("Job payload: %s" % scrape_job)
         scraper_name = scrape_job["scraper"]
         scraper = scrapermap[scraper_name]
         post = scraper.consume(scrape_job)

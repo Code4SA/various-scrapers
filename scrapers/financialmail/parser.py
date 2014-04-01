@@ -20,13 +20,14 @@ class Scraper(object):
 
     def produce(self):
         for publication, url in self.publications:
+            import pdb; pdb.set_trace()
             soup = url2soup(url)
 
             for article in soup.select(".article"):
                 if hasattr(article, "h4") and hasattr(article.h4, "a"):
                     url = article.h4.a["href"]
+                    if not url: continue
                     title = article.h4.a.text
-                    print url
 
                     msg = {
                         "url" : url,
