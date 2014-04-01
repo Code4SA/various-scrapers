@@ -21,6 +21,7 @@ class FeedScraper(object):
             try:
                 for entry in feed["entries"]:
                     url = entry["link"]
+                    logger.info("Pushing %s" % url)
                     if articles.find_one({"url" : url}):
                         raise OlderArticlesAlreadySeenException()
                     msg = self._gen_prod_message(entry, publication)
