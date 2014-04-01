@@ -5,6 +5,7 @@ from urlparse import urljoin
 
 from bs4 import BeautifulSoup
 import requests
+from requests.exceptions import RequestException
 from dateutil import parser as date_parser
 from ..config import articles
 from ..scrapers import FeedScraper
@@ -79,6 +80,8 @@ class Scraper(object):
                 return data
             except UnicodeEncodeError:
                 logging.exception("Error parsing url - possibly unicode url")
+            except RequestException:
+                logging.exception("Error accessing url: %s" % job)
 
 scraper = Scraper(publications)
 def produce():

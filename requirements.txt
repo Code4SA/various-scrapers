@@ -17,3 +17,4 @@ html5lib
 fabric
 python-dateutil
 mixpanel-py
+tweepy
