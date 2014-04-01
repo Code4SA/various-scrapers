@@ -60,7 +60,7 @@ class ArticleParser(object):
 
         ps = article.select("p")
         for p in ps:
-            if not "class" in p.attrs:
+            if not "class" in p.attrs or p.attrs["class"] == "p":
                 content.append(p.text)
         text =  "\n".join(content)
 
