@@ -1,6 +1,8 @@
 *.py[cod]
 *.sw?
 *.log
+settings.py
+fabdefs.py
 
 # C extensions
 *.so

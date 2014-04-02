@@ -6,6 +6,7 @@ import time
 from scrapers.config import beanstalk, db_insert
 from publications import scrapermap
 from requests.exceptions import ConnectionError
+import settings
 
 logger = logging.getLogger(__name__)
 
@@ -41,13 +42,18 @@ def producer():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("task", help="Select either producer or consumer. Producers collect urls and place them in a queue. Consumers scrape those urls.")
+    parser.add_argument("task", help="Select either producer, consumer or twitter. Producers collect urls and place them in a queue. Consumers scrape those urls. Twitter will run the twitter stream api and collect tweets")
     args = parser.parse_args()
 
     if args.task == "consumer":
         consumer()
     elif args.task == "producer":
         producer()
+    elif args.task == "twitter":
+        from scrapers.twitter import twitter
+        twitter.run(
+            settings.consumer_key, settings.consumer_secret, settings.access_token, settings.access_token_secret
+        )
     else:
         # TODO - figure out how to throw an argparse error
         print "Invalid option"
