@@ -1,13 +1,17 @@
 from __future__ import print_function
 import json
+from datetime import datetime
+import logging
 
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
 import tweepy
 
-
+from ..config import db_insert
 from accounts import accounts
+
+logger = logging.getLogger(__name__)
 
 class StdOutListener(StreamListener):
     """ A listener handles tweets are the received from the stream.
@@ -17,41 +21,45 @@ class StdOutListener(StreamListener):
     def __init__(self, accounts):
         self.accounts = accounts
 
+    def create_post(self, data):
+        msg_id = data["id"]
+        tweet_url = "https://twitter.com/%s/status/%s" % (data["user"]["screen_name"], msg_id)
+        logger.info(data["text"])
+
+        post = {
+            "publication" : "Twitter",
+            "id" : msg_id,
+            "author" : data["user"]["screen_name"],
+            "summary" : "",
+            "published" : data["created_at"],
+            "title" : "",
+            "text" : data["text"],
+            "owner" : "Twitter",
+            "sub_type" : 1,
+            "url" : tweet_url, 
+            "downloaded_at" : datetime.now()
+        }
+        db_insert(post)
+
     def on_data(self, data):
         js = json.loads(data)
         try:
-            msg_id = js["id"]
-            if js["user"]["id_str"] in self.accounts:
-                text = js["text"].decode("utf8")
-                tweet_url = "https://twitter.com/%s/status/%s" % (msg_id, js["user"]["screen_name"])
-                screen_name = js["user"]["screen_name"].encode("utf8")
-                print("%s - %s [%s]> %s" % (screen_name, js["created_at"], tweet_url, text))
+            post = self.create_post(js)
+            db_insert(post)
         except Exception:
+            logger.exception("Error when processing tweet: %s" % data)
             import pdb; pdb.set_trace()
         return True
 
     def on_error(self, status):
-        print(status)
+        logger.warn("Twitter stream error: %s" % status)
 
-consumer_key = "rawN6bVWzbsvdKh9R1BYw"
-consumer_secret = "yv0YWyommuac4caIlqd5245spIeAnegIZlb4Q5iRk"
-access_token = "21011010-rmh8p683Hs8ljNJFKnKdhnxj84dVBF30KeGKJT9MI"
-access_token_secret = "Ad5eZ3j9AmAkrvZpGVzICWKbzHOnJ8FaznDVD06xXWcMr"
-
-if __name__ == '__main__':
+def run(consumer_key, consumer_secret, access_token, access_token_secret):
     auth = OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
     api = tweepy.API(auth)
 
-    ids = set()
-    for u in accounts:
-        if type(u) == tuple:
-            id = u[1]
-        else:
-            u = u.strip()
-            id = api.get_user(u).id
-            print('("%s", "%s")' % (u, id))
-        ids.add(id)
+    ids = set(t[1] for t in accounts)
     l = StdOutListener(ids)
     stream = Stream(auth, l)
     js = stream.filter(follow=list(ids))

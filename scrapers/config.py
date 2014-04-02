@@ -38,7 +38,6 @@ g = MyGoose(config)
     
 def db_insert(post):
     if post:
-        print post['publication']
         mp.track(None, post["publication"])
         articles.insert(post)
 
