@@ -8,7 +8,7 @@ from tweepy import OAuthHandler
 from tweepy import Stream
 import tweepy
 
-from ..config import db_insert
+from ..config import db_insert, articles
 from accounts import accounts
 
 logger = logging.getLogger(__name__)
@@ -39,7 +39,8 @@ class StdOutListener(StreamListener):
             "url" : tweet_url, 
             "downloaded_at" : datetime.now()
         }
-        db_insert(post)
+        if not articles.find_one({"url" : tweet_url}):
+            db_insert(post)
 
     def on_data(self, data):
         js = json.loads(data)
