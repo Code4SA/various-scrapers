@@ -23,7 +23,7 @@ class StdOutListener(StreamListener):
 
     def create_post(self, data):
         msg_id = data["id"]
-        tweet_url = "https://twitter.com/%s/status/%s" % (msg_id, data["user"]["screen_name"])
+        tweet_url = "https://twitter.com/%s/status/%s" % (data["user"]["screen_name"], msg_id)
         logger.info(data["text"])
 
         post = {
