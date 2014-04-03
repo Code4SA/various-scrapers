@@ -45,6 +45,10 @@ def configure():
 
     supervisor_conf = open("deploy/consumers.conf").read() % { "code_dir" : env.code_dir, "env_dir" : env.env_dir }
     sudo("echo '%s' > /etc/supervisor/conf.d/consumers.conf" % supervisor_conf)
+
+    supervisor_conf = open("deploy/twitter.conf").read() % { "code_dir" : env.code_dir, "env_dir" : env.env_dir }
+    sudo("echo '%s' > /etc/supervisor/conf.d/twitter.conf" % supervisor_conf)
+
     sudo("supervisorctl update")
 
 
