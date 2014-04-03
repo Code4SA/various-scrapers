@@ -28,6 +28,7 @@ class Scraper(BasicFeedScraper):
                 if len(byline) > 0:
                     parts = byline[0].text.strip().split("\n")
                     published = date_parser.parse(parts[0].strip())
+                    author = ""
                     if len(parts) > 1:
                         author = parts[1].replace("by", "").strip()
                     
