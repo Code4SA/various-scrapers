@@ -53,9 +53,17 @@ class Pager(object):
             logging.exception(e)
 
 class ArticleParser(object):
+    @staticmethod
+    def first_or_none(el):
+        if len(el) > 0:
+            return el[0]
+        return None
+
     def parse_html(self, html):
         soup = BeautifulSoup(html)
-        article = soup.select(".article-fullview")[0]
+        article = \
+            ArticleParser.first_or_none(soup.select(".article-fullview")) \
+            or ArticleParser.first_or_none(soup.select(".article-content"))
         content = []
 
         ps = article.select("p")
@@ -103,6 +111,7 @@ def consume(job):
     parser = ArticleParser()
     
     try:
+        url = "http://lowvelder.co.za/87640/stoeiers-hou-n-gholfdag/"
         if not articles.find_one({"url" : url}):
             content = requests.get(url)
             post = parser.parse_html(content.text)
