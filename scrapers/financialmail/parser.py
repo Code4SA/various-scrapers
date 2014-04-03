@@ -26,7 +26,7 @@ class Scraper(object):
             for article in soup.select(".article"):
                 if hasattr(article, "h4") and hasattr(article.h4, "a"):
                     url = article.h4.a["href"]
-                    if not url: continue
+                    if not url or url.strip() == "": continue
                     title = article.h4.a.text
 
                     msg = {
