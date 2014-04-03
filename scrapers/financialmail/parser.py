@@ -20,7 +20,6 @@ class Scraper(object):
 
     def produce(self):
         for publication, url in self.publications:
-            import pdb; pdb.set_trace()
             soup = url2soup(url)
 
             for article in soup.select(".article"):

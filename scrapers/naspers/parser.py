@@ -111,7 +111,6 @@ def consume(job):
     parser = ArticleParser()
     
     try:
-        url = "http://lowvelder.co.za/87640/stoeiers-hou-n-gholfdag/"
         if not articles.find_one({"url" : url}):
             content = requests.get(url)
             post = parser.parse_html(content.text)
