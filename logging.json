@@ -17,22 +17,22 @@
 
         "info_file_handler": {
             "class": "logging.handlers.TimedRotatingFileHandler",
-            "level": "DEBUG",
+            "level": "INFO",
             "when": "D",
             "interval" : 1,
             "formatter": "simple",
-            "filename": "debug.log",
+            "filename": "/var/www/scrapers-backup/info.log",
             "backupCount": "20",
             "encoding": "utf8"
         },
 
         "error_file_handler": {
             "class": "logging.handlers.TimedRotatingFileHandler",
-            "level": "ERROR",
+            "level": "WARNING",
             "when": "D",
             "interval" : 1,
             "formatter": "simple",
-            "filename": "errors.log",
+            "filename": "/var/www/scrapers-backup/errors.log",
             "backupCount": "20",
             "encoding": "utf8"
         }
