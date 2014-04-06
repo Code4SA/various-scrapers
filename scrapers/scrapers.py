@@ -2,6 +2,7 @@ import json
 import datetime
 import logging
 import dateutil.parser as date_parser
+from utils import url2soup
 
 import feedparser
 from .config import beanstalk, articles, g
@@ -11,6 +12,112 @@ logger = logging.getLogger(__name__)
 class OlderArticlesAlreadySeenException(Exception):
     pass
 
+class FakeFeeder(object):
+    def __init__(self, publication, urls, scraper):
+        self.publication = publication
+        self.urls = urls
+        self.scraper = scraper
+
+    def produce(self):
+        for url in self.urls:
+            msg = {
+                "url" : url,
+                "scraper" : self.scraper,
+                "publication" : self.publication,
+                "entry" : {
+                    "summary" : "",
+                    "published" : "",
+                    "title" : "",
+                    "author" : "",
+                }
+            }
+
+            yield json.dumps(msg)
+
+
+class Feeder(object):
+    def __init__(self, scraper, publications):
+        self.publications = publications
+        self.scraper = scraper
+
+    def produce(self):
+        for publication, feed_url in self.publications:
+            feed = feedparser.parse(feed_url)
+            try:
+                for entry in feed["entries"]:
+                    url = entry["link"]
+                    logger.info("Pushing %s" % url)
+                    if articles.find_one({"url" : url}):
+                        raise OlderArticlesAlreadySeenException()
+
+
+                    msg = {
+                        "url" : url,
+                        "scraper" : self.scraper,
+                        "publication" : publication,
+                        "entry" : {
+                            "summary" : entry.get("description", ""),
+                            "published" : entry.get("published", ""),
+                            "title" : entry.get("title", ""),
+                        }
+                    }
+
+                    if "author" in entry:
+                        msg["entry"]["author"] = entry["author"]
+
+                    yield json.dumps(msg)
+            except OlderArticlesAlreadySeenException:
+                pass
+
+class ScraperConsumer(object):
+
+    def get_title(self, soup):
+        return ""
+
+    def get_author(self, soup):
+        return ""
+
+    def get_publishdate(self, soup):
+        return ""
+
+    def get_body(self, soup):
+        return ""
+
+    def get_summary(self, soup):
+        return ""
+
+    def get_owner(self, soup):
+        return NotImplementedException()
+
+    def get_subtype(self, soup):
+        return 1
+
+    def consume(self, job):
+        url = job["url"]
+        entry = job["entry"]
+        if not articles.find_one({"url" : url}):
+            try:
+                soup = url2soup(url)
+                if not soup: return None
+
+                data = {
+                    "publication" : job["publication"],
+                    "url" : job["url"],
+                    "author" : self.get_author(soup),
+                    "summary" : self.get_summary(soup),
+                    "published" : self.get_publishdate(soup),
+                    "title" : self.get_title(soup),
+                    "text" : self.get_body(soup),
+                    "owner" : self.get_owner(soup),
+                    "sub_type" : self.get_subtype(soup),
+                    "downloaded_at" : datetime.datetime.now()
+                }
+                return data
+            except UnicodeEncodeError:
+                logging.exception("Error parsing url - possibly unicode url")
+            except RequestException:
+                logging.exception("Error accessing url: %s" % job)
+    
 class FeedScraper(object):
     def __init__(self, publications):
         self.publications = publications

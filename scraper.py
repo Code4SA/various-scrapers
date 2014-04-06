@@ -3,7 +3,7 @@ import logging
 import argparse
 import sys
 import time
-from scrapers.config import beanstalk, db_insert
+from scrapers.config import beanstalk, db_insert, db_update
 from publications import scrapermap
 from requests.exceptions import ConnectionError
 import settings
@@ -40,15 +40,40 @@ def producer():
         except Exception:
             logger.exception("Error occurred in producer for %s" % publication)
 
+def fake_produce(fp, scraper):
+    from scrapers.caxton import consume
+    for row in fp:
+        js = json.loads(row)
+        msg ={
+            "url" : js["url"],
+            "scraper" : scraper,
+            "publication" : js["publication"],
+            "entry" : {
+                "summary" : "",
+                "published" : "",
+                "title" : "",
+                "author" : "",
+            }
+        }
+        data = consume(msg)
+        for k, v in data.items():
+            if v: js[k] = v
+
+        db_update(js)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("task", help="Select either producer, consumer or twitter. Producers collect urls and place them in a queue. Consumers scrape those urls. Twitter will run the twitter stream api and collect tweets")
+    parser.add_argument('scraper')
+    parser.add_argument('infile', nargs='?', type=argparse.FileType('r'), default=sys.stdin)
     args = parser.parse_args()
 
     if args.task == "consumer":
         consumer()
     elif args.task == "producer":
         producer()
+    elif args.task == "fake":
+        fake_produce(args.infile, args.scraper)
     elif args.task == "twitter":
         from scrapers.twitter import twitter
         twitter.run(
