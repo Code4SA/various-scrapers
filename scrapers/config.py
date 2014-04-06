@@ -41,6 +41,13 @@ def db_insert(post):
         mp.track(None, post["publication"])
         articles.insert(post)
 
+def db_update(post):
+    if post:
+        id = post["_id"]
+        del post["_id"]
+        
+        articles.update(id, post, upsert=False, multi=False)
+
 def setup_logging(
     default_path='logging.json', 
     default_level=logging.DEBUG,
