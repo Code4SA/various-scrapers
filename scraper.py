@@ -65,7 +65,7 @@ def fake_produce(fp, scraper):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("task", help="Select either producer, consumer or twitter. Producers collect urls and place them in a queue. Consumers scrape those urls. Twitter will run the twitter stream api and collect tweets")
-    parser.add_argument('scraper')
+    parser.add_argument('scraper', nargs='?', default="")
     parser.add_argument('infile', nargs='?', type=argparse.FileType('r'), default=sys.stdin)
     args = parser.parse_args()
 
