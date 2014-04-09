@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 import logging
 import argparse
 import sys
@@ -13,11 +14,10 @@ logger = logging.getLogger(__name__)
 def consumer():
     logger.info("Starting consumer")
     while True:
-        logger.info("Waiting for job")
+        logger.debug("Waiting for job")
         job = beanstalk.reserve()
         scrape_job = json.loads(job.body)
-
-        logger.info("Job payload: %s" % scrape_job)
+        logger.debug("Job payload: %s" % scrape_job)
         scraper_name = scrape_job["scraper"]
         scraper = scrapermap[scraper_name]
         post = scraper.consume(scrape_job)
@@ -43,7 +43,8 @@ def producer():
 
 def fake_produce(fp, scraper):
     from scrapers.caxton import consume
-    for row in fp:
+    for i, row in enumerate(fp):
+        print i
         js = json.loads(row)
         msg ={
             "url" : js["url"],
@@ -56,11 +57,14 @@ def fake_produce(fp, scraper):
                 "author" : "",
             }
         }
+        del js["_id"]
+        js["published"] = datetime.fromtimestamp(js["published"]["$date"] / 1e3)
         data = consume(msg)
+        if not data: continue
         for k, v in data.items():
             if v: js[k] = v
 
-        db_update(js)
+        db_insert(js)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
