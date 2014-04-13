@@ -57,27 +57,29 @@ class Scraper(object):
                     author = ""
                     date = date_parser.parse(meta)
 
-                body_root = soup.select(".articlebody .body")[0]
-                [el.extract() for el in body_root.select(".image")]
-                [el.extract() for el in body_root.select(".teaser")]
+                body_root = soup.select(".articlebody .body")
+                if len(body_root) > 0:
+                    body_root = body_root[0]
+                    [el.extract() for el in body_root.select(".image")]
+                    [el.extract() for el in body_root.select(".teaser")]
 
-                body = ""
-                for p in body_root.select("p"):
-                    body += p.text + "\n"
-                
-                data = {
-                    "publication" : job["publication"],
-                    "url" : job["url"],
-                    "author" : author,
-                    "summary" : "",
-                    "published" : date,
-                    "title" : title,
-                    "text" : body,
-                    "owner" : "Financial Mail",
-                    "sub_type" : 1,
-                    "downloaded_at" : datetime.datetime.now()
-                }
-                return data
+                    body = ""
+                    for p in body_root.select("p"):
+                        body += p.text + "\n"
+                    
+                    data = {
+                        "publication" : job["publication"],
+                        "url" : job["url"],
+                        "author" : author,
+                        "summary" : "",
+                        "published" : date,
+                        "title" : title,
+                        "text" : body,
+                        "owner" : "Financial Mail",
+                        "sub_type" : 1,
+                        "downloaded_at" : datetime.datetime.now()
+                    }
+                    return data
             except UnicodeEncodeError:
                 logging.exception("Error parsing url - possibly unicode url")
             except RequestException:
