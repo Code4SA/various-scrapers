@@ -49,7 +49,6 @@ class StdOutListener(StreamListener):
             db_insert(post)
         except Exception:
             logger.exception("Error when processing tweet: %s" % data)
-            import pdb; pdb.set_trace()
         return True
 
     def on_error(self, status):
