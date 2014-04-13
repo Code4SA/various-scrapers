@@ -12,14 +12,14 @@ import scrapers.northwest as northwest
 
 scrapermap = {
     "caxton_local" : caxton,
-    #"naspers_local" : naspers,
-    #"iol" : iol,
-    #"naspers_feeds" : naspers_feeds,
-    #"independent_feeds" : independent_feeds,
-    #"mg" : mg,
-    #"thebugle" : thebugle,
-    #"naspers_type3" : naspers_type3,
-    #"financial_mail" : financialmail,
-    #"isolezwe" : isolezwe
+    "naspers_local" : naspers,
+    "iol" : iol,
+    "naspers_feeds" : naspers_feeds,
+    "independent_feeds" : independent_feeds,
+    "mg" : mg,
+    "thebugle" : thebugle,
+    "naspers_type3" : naspers_type3,
+    "financial_mail" : financialmail,
+    "isolezwe" : isolezwe
 }
 
