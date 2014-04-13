@@ -3,6 +3,7 @@ import datetime
 import logging
 import dateutil.parser as date_parser
 from utils import url2soup
+from requests import RequestException
 
 import feedparser
 from .config import beanstalk, articles, g
