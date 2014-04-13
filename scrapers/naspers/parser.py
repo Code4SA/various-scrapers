@@ -66,15 +66,20 @@ class ArticleParser(object):
             or ArticleParser.first_or_none(soup.select(".article-content"))
         content = []
 
-        ps = article.select("p")
-        for p in ps:
-            if not "class" in p.attrs or p.attrs["class"] == "p":
-                content.append(p.text)
-        text =  "\n".join(content)
+        for el in ["p", "div"]:
+            ps = article.select(el)
+            for p in ps:
+                if not "class" in p.attrs or p.attrs["class"] == "p":
+                    content.append(p.text)
+            text =  "\n".join(content)
 
-        published_date = article.select(".publish-date")[0].text
-        if ":" in published_date:
-            published_date = published_date.split(":")[1].strip()
+        try:
+            published_date = article.select(".publish-date")[0].text
+            if ":" in published_date:
+                published_date = published_date.split(":")[1].strip()
+            published_date = date_parser.parser(published_date)
+        except Exception:
+            published_date = None
 
         meta = article.select(".meta")
         author = ""
