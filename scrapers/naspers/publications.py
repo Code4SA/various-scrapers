@@ -16,7 +16,7 @@ publications = [
     ("Eikestad Nuus", "http://www.eikestadnuus.mobi"),
     ("Express Paper", "http://www.expresspaper.mobi"),
     ("Greytown Gazette", "http://www.greytowngazette.mobi"),
-    ("Hammanskraal News", "http://www.hammanskraalnews.mobi"),
+    ("Hammanskraal News", "http://hammanskraalnews.mobi"),
     ("Hermanus Times", "http://www.hermanustimes.mobi"),
     ("Hillcrest Fever", "http://www.hillcrestfever.mobi"),
     ("Isolomzi Express", "http://www.isoexpress.mobi"),
