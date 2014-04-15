@@ -125,7 +125,6 @@ def produce():
 def consume(job):
     url = job["url"]
     parser = ArticleParser()
-    url = "http://tametimes.mobi/news/read/3824/rapist-kry-nie-bail-vir-verhoor"
     
     try:
         if not articles.find_one({"url" : url}):
