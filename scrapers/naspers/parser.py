@@ -69,7 +69,18 @@ class ArticleParser(object):
         for el in ["p", "div"]:
             ps = article.select(el)
             for p in ps:
-                if not "class" in p.attrs or p.attrs["class"] == "p":
+                is_content = False
+
+                class_is_list = "class" in p.attrs and type(p.attrs["class"]) == list
+                has_class = "class" in p.attrs
+
+                if class_is_list and "p" in p.attrs["class"]:
+                    is_content = True
+                elif has_class and p.attrs["class"] == "p":
+                    is_content = True
+                    
+            
+                if not has_class or is_content:
                     content.append(p.text)
             text =  "\n".join(content)
 
@@ -114,6 +125,7 @@ def produce():
 def consume(job):
     url = job["url"]
     parser = ArticleParser()
+    url = "http://tametimes.mobi/news/read/3824/rapist-kry-nie-bail-vir-verhoor"
     
     try:
         if not articles.find_one({"url" : url}):
