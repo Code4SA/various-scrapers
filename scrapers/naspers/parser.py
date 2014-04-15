@@ -88,7 +88,7 @@ class ArticleParser(object):
             published_date = article.select(".publish-date")[0].text
             if ":" in published_date:
                 published_date = published_date.split(":")[1].strip()
-            published_date = date_parser.parser(published_date)
+            published_date = date_parser.parse(published_date)
         except Exception:
             published_date = None
 
@@ -130,6 +130,7 @@ def consume(job):
         if not articles.find_one({"url" : url}):
             content = requests.get(url)
             post = parser.parse_html(content.text)
+            import pdb; pdb.set_trace()
             post["publication"] = job["publication"]
             post["url"] = url
             post["downloaded_at"] = datetime.datetime.now()
