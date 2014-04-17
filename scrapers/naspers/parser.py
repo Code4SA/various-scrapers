@@ -60,11 +60,20 @@ class Consumer(ScraperConsumer):
             return el[0]
         return None
 
+    @staticmethod
+    def text_or_none(el):
+        if len(el) > 0:
+            return el[0].text.strip()
+        return None
+
     def _get_article(self, soup):
         article = \
             Consumer.first_or_none(soup.select(".article-fullview")) \
             or Consumer.first_or_none(soup.select(".article-content"))
         return article
+
+    def get_caption(self, soup):
+        return Consumer.text_or_none(soup.select(".wp-caption-text"))
 
     def get_body(self, soup):
         article = self._get_article(soup)
@@ -87,6 +96,11 @@ class Consumer(ScraperConsumer):
                 if not has_class or is_content:
                     content.append(p.text)
         text =  "\n".join(content)
+
+        caption = self.get_caption(soup)
+        if caption:
+            text += "\n\n" + caption
+
         return text
 
     def get_publishdate(self, soup):
@@ -116,7 +130,14 @@ class Consumer(ScraperConsumer):
 
     def get_title(self, soup):
         article = self._get_article(soup)
-        return article.select("h2.sub-heading")[0].text
+
+        heading = Consumer.text_or_none(article.select("h2.sub-heading"))
+        if heading: return heading
+
+        heading = Consumer.text_or_none(soup.select("h1[itemprop=headline]"))
+        if heading: return heading
+
+        return ""
 
     def get_owner(self, soup):
         return "Naspers/Media24"
