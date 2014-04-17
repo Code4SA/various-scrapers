@@ -77,6 +77,7 @@ class Consumer(ScraperConsumer):
 
     def get_body(self, soup):
         article = self._get_article(soup)
+        allowed_classes = ["p", "s1"]
 
         content = []
         for el in ["p", "div"]:
@@ -87,9 +88,9 @@ class Consumer(ScraperConsumer):
                 class_is_list = "class" in p.attrs and type(p.attrs["class"]) == list
                 has_class = "class" in p.attrs
 
-                if class_is_list and "p" in p.attrs["class"]:
+                if class_is_list and p.attrs["class"][0] in allowed_classes:
                     is_content = True
-                elif has_class and p.attrs["class"] == "p":
+                elif has_class and p.attrs["class"] in allowed_classes:
                     is_content = True
                     
             
