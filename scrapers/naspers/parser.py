@@ -9,6 +9,7 @@ from publications import publications
 from requests.exceptions import ConnectionError
 from dateutil import parser as date_parser
 from ..config import articles, db_insert
+from ..scrapers import ScraperConsumer
 
 logger = logging.getLogger(__name__)
 def new_url(path):
@@ -52,20 +53,23 @@ class Pager(object):
         except Exception, e:
             logging.exception(e)
 
-class ArticleParser(object):
+class Consumer(ScraperConsumer):
     @staticmethod
     def first_or_none(el):
         if len(el) > 0:
             return el[0]
         return None
 
-    def parse_html(self, html):
-        soup = BeautifulSoup(html)
+    def _get_article(self, soup):
         article = \
-            ArticleParser.first_or_none(soup.select(".article-fullview")) \
-            or ArticleParser.first_or_none(soup.select(".article-content"))
-        content = []
+            Consumer.first_or_none(soup.select(".article-fullview")) \
+            or Consumer.first_or_none(soup.select(".article-content"))
+        return article
 
+    def get_body(self, soup):
+        article = self._get_article(soup)
+
+        content = []
         for el in ["p", "div"]:
             ps = article.select(el)
             for p in ps:
@@ -82,7 +86,11 @@ class ArticleParser(object):
             
                 if not has_class or is_content:
                     content.append(p.text)
-            text =  "\n".join(content)
+        text =  "\n".join(content)
+        return text
+
+    def get_publishdate(self, soup):
+        article = self._get_article(soup)
 
         try:
             published_date = article.select(".publish-date")[0].text
@@ -91,23 +99,27 @@ class ArticleParser(object):
             published_date = date_parser.parse(published_date)
         except Exception:
             published_date = None
+        return published_date
+
+    def get_author(self, soup):
+        article = self._get_article(soup)
 
         meta = article.select(".meta")
         author = ""
         if len(meta) == 1: author = meta[0].text
         if ":" in author: author = author.split(":")[1].strip()
+        return author
 
-        post = {
-            "author" : author,
-            "summary" : text[0:60],
-            "published" : published_date,
-            "title" : article.select("h2.sub-heading")[0].text,
-            "meta_description" : "",
-            "text" : text
-        }
+    def get_summary(self, soup):
+        body = self.get_body(soup)
+        return body[0:60]
 
-        
-        return post 
+    def get_title(self, soup):
+        article = self._get_article(soup)
+        return article.select("h2.sub-heading")[0].text
+
+    def get_owner(self, soup):
+        return "Naspers/Media24"
 
 def produce():
     for publication, base_url in publications:
@@ -120,22 +132,11 @@ def produce():
                 "url" : url,
                 "scraper" : "naspers_local",
                 "publication" : publication,
+                "entry" : { },
             })
 
+consumer = Consumer()
 def consume(job):
-    url = job["url"]
-    parser = ArticleParser()
-    
-    try:
-        if not articles.find_one({"url" : url}):
-            content = requests.get(url)
-            post = parser.parse_html(content.text)
-            import pdb; pdb.set_trace()
-            post["publication"] = job["publication"]
-            post["url"] = url
-            post["downloaded_at"] = datetime.datetime.now()
-            return post
-    except Exception:
-        logger.exception("Could not download: %s" % url)
-
+    print job
+    return consumer.consume(job)
 
