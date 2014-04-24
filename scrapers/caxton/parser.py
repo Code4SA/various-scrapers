@@ -17,6 +17,10 @@ class Consumer(ScraperConsumer):
 
     def get_body(self, soup):
         body = ""
+        caption = soup.select(".wp-caption-text")
+        for c in caption:
+            body += c.text + "\n\n"
+
         content = soup.select(".article-content p")
         for p in content:
             body += p.text + "\n\n"
