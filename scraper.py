@@ -43,7 +43,6 @@ def producer():
 
 def fake_produce(fp, scraper):
     from scrapers.caxton import consume
-    import pdb; pdb.set_trace()
     for i, row in enumerate(fp):
         print i
         js = json.loads(row)
