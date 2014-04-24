@@ -43,6 +43,7 @@ def producer():
 
 def fake_produce(fp, scraper):
     from scrapers.caxton import consume
+    import pdb; pdb.set_trace()
     for i, row in enumerate(fp):
         print i
         js = json.loads(row)
@@ -57,8 +58,9 @@ def fake_produce(fp, scraper):
                 "author" : "",
             }
         }
-        del js["_id"]
-        js["published"] = datetime.fromtimestamp(js["published"]["$date"] / 1e3)
+        if "_id" in js: del js["_id"]
+        js["published"] = ""
+        #js["published"] = datetime.fromtimestamp(js["published"]["$date"] / 1e3)
         data = consume(msg)
         if not data: continue
         for k, v in data.items():
