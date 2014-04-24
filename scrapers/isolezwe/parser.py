@@ -30,7 +30,7 @@ class Scraper(BasicFeedScraper):
                     published = date_parser.parse(parts[0].strip())
                     author = ""
                     if len(parts) > 1:
-                        author = parts[1].replace("by", "").strip()
+                        author = parts[1].title().replace("By", "").strip()
                     
 
                 body = ""
