@@ -53,7 +53,7 @@ class Scraper(object):
                     author, date = meta.split(",", 1)
                     author = author.strip().replace("by ", "").strip()
                     date = date_parser.parse(date)
-                except ValueError:
+                except (ValueError, TypeError):
                     author = ""
                     date = date_parser.parse(meta)
 

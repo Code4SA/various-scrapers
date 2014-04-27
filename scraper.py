@@ -1,7 +1,9 @@
 import json
+import time
 from datetime import datetime
 import logging
 import argparse
+import beanstalkc
 import sys
 import time
 from scrapers.config import beanstalk, db_insert, db_update
@@ -28,6 +30,8 @@ def consumer():
                     logger.warn("Missing text from %s" % post["url"])
                 db_insert(post)
             job.delete()
+        except beanstalkc.BeanstalkcException:
+            time.sleep(0.5)
         except Exception:
             logger.exception("Error processing job")
 
