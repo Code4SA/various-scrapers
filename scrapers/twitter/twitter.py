@@ -45,6 +45,7 @@ class StdOutListener(StreamListener):
     def on_data(self, data):
         js = json.loads(data)
         try:
+            if "delete" in js: return False
             post = self.create_post(js)
             db_insert(post)
         except Exception:

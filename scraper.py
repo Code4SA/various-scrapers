@@ -1,7 +1,9 @@
 import json
+import time
 from datetime import datetime
 import logging
 import argparse
+import beanstalkc
 import sys
 import time
 from scrapers.config import beanstalk, db_insert, db_update
@@ -14,19 +16,24 @@ logger = logging.getLogger(__name__)
 def consumer():
     logger.info("Starting consumer")
     while True:
-        logger.debug("Waiting for job")
-        job = beanstalk.reserve()
-        scrape_job = json.loads(job.body)
-        logger.debug("Job payload: %s" % scrape_job)
-        scraper_name = scrape_job["scraper"]
-        scraper = scrapermap[scraper_name]
-        post = scraper.consume(scrape_job)
-        if post:
-            entry = post.get("text", "").strip()
-            if len(entry) < 5:
-                logger.warn("Missing text from %s" % post["url"])
-            db_insert(post)
-        job.delete()
+        try:
+            logger.debug("Waiting for job")
+            job = beanstalk.reserve()
+            scrape_job = json.loads(job.body)
+            logger.debug("Job payload: %s" % scrape_job)
+            scraper_name = scrape_job["scraper"]
+            scraper = scrapermap[scraper_name]
+            post = scraper.consume(scrape_job)
+            if post:
+                entry = post.get("text", "").strip()
+                if len(entry) < 5:
+                    logger.warn("Missing text from %s" % post["url"])
+                db_insert(post)
+            job.delete()
+        except beanstalkc.BeanstalkcException:
+            time.sleep(0.5)
+        except Exception:
+            logger.exception("Error processing job")
 
 def producer():
     for publication, scraper in scrapermap.items():
@@ -57,8 +64,9 @@ def fake_produce(fp, scraper):
                 "author" : "",
             }
         }
-        del js["_id"]
-        js["published"] = datetime.fromtimestamp(js["published"]["$date"] / 1e3)
+        if "_id" in js: del js["_id"]
+        js["published"] = ""
+        #js["published"] = datetime.fromtimestamp(js["published"]["$date"] / 1e3)
         data = consume(msg)
         if not data: continue
         for k, v in data.items():
