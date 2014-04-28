@@ -55,7 +55,10 @@ class Scraper(object):
                     date = date_parser.parse(date)
                 except (ValueError, TypeError):
                     author = ""
-                    date = date_parser.parse(meta)
+                    try:
+                        date = date_parser.parse(meta)
+                    except (ValueError, TypeError):
+                        date = None
 
                 body_root = soup.select(".articlebody .body")
                 if len(body_root) > 0:
