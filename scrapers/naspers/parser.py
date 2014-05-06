@@ -3,6 +3,7 @@ import logging
 import datetime
 from pymongo import MongoClient
 from bs4 import BeautifulSoup
+from bs4.element import Tag
 import requests
 from urlparse import urlparse, urljoin
 from publications import publications
@@ -121,8 +122,13 @@ class Consumer(ScraperConsumer):
 
         meta = article.select(".meta")
         author = ""
-        if len(meta) == 1: author = meta[0].text
-        if ":" in author: author = author.split(":")[1].strip()
+        if len(meta) == 1:
+            parts = meta[0].contents
+            for i, el in enumerate(parts):
+                if type(el) == Tag and "by:" in el.text.lower():
+                    author = parts[i + 1].strip()
+                    break
+                
         return author
 
     def get_summary(self, soup):
@@ -159,6 +165,5 @@ def produce():
 
 consumer = Consumer()
 def consume(job):
-    print job
     return consumer.consume(job)
 
