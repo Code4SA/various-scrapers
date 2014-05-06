@@ -103,6 +103,8 @@ class Consumer(ScraperConsumer):
         if caption:
             text += "\n\n" + caption
 
+        if len(text) < 5:
+            return article.text
         return text
 
     def get_publishdate(self, soup):
